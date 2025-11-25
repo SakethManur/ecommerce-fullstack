@@ -1,0 +1,36 @@
+/* Import Google Font 'Poppins' */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* Apply it everywhere */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif; /* <--- This changes the whole vibe */
+  background-color: #fcfcfc; /* Slightly off-white background is easier on the eyes */
+  color: #333;
+}
+
+/* Make buttons look better globally */
+button {
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar (Optional - makes it look like a Mac/Modern App) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  borderRadius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
