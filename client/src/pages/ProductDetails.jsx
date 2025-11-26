@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // If you removed this, switch back to alert()
+import { toast } from 'react-toastify'; // Optional, fallback to alert if not installed
 
 function ProductDetails() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [reviews, setReviews] = useState([]);
-    const [selectedSize, setSelectedSize] = useState(null); // <--- NEW STATE
+    const [selectedSize, setSelectedSize] = useState(null);
 
     // Form State
     const [rating, setRating] = useState(5);
@@ -41,8 +41,6 @@ function ProductDetails() {
     const addToCart = async () => {
         if (!userId) return alert("Please Login First!");
         
-        // --- SIZE VALIDATION ---
-        // If product has sizes, but user didn't pick one:
         if (product.sizes && !selectedSize) {
             alert("Please select a size!");
             return;
@@ -53,7 +51,7 @@ function ProductDetails() {
                 userId, 
                 productId: id, 
                 quantity: 1,
-                size: selectedSize // <--- SEND SIZE
+                size: selectedSize 
             });
             alert("Added to Cart!");
         } catch (err) {
@@ -61,12 +59,19 @@ function ProductDetails() {
         }
     };
 
-    // (Code for reviews omitted for brevity - keeping it simple)
-    // You can paste your submitReview function here if you want it back
+    // --- WISHLIST FUNCTION ---
+    const addToWishlist = async () => {
+        if (!userId) return alert("Please Login First!");
+        try {
+            await axios.post('http://localhost:5001/wishlist', { userId, productId: id });
+            alert("Added to Wishlist ❤️");
+        } catch (err) {
+            alert("Already in wishlist or error");
+        }
+    };
 
     if (!product) return <h2>Loading...</h2>;
 
-    // Convert string "S,M,L" into array ["S", "M", "L"]
     const sizeArray = product.sizes ? product.sizes.split(',') : [];
 
     return (
@@ -88,7 +93,7 @@ function ProductDetails() {
                     <h2 style={{ fontSize: '30px', margin: '20px 0' }}>${product.price}</h2>
                     <p style={{ fontSize: '16px', color: '#666', lineHeight: '1.6' }}>{product.description}</p>
                     
-                    {/* --- SIZE SELECTOR (Only shows if sizes exist) --- */}
+                    {/* Size Selector */}
                     {sizeArray.length > 0 && (
                         <div style={{ margin: '30px 0' }}>
                             <p style={{ fontWeight: 'bold', marginBottom: '10px' }}>Select Size:</p>
@@ -114,16 +119,38 @@ function ProductDetails() {
                         </div>
                     )}
 
-                    <button 
-                        onClick={addToCart}
-                        style={{ padding: '15px 40px', fontSize: '18px', background: 'black', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '30px', marginTop: '20px' }}
-                    >
-                        ADD TO CART
-                    </button>
+                    {/* --- BUTTONS SECTION --- */}
+                    <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
+                        <button 
+                            onClick={addToCart}
+                            style={{ flex: 1, padding: '15px', fontSize: '18px', background: 'black', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '30px' }}
+                        >
+                            ADD TO CART
+                        </button>
+
+                        {/* WISHLIST BUTTON */}
+                        <button 
+                            onClick={addToWishlist}
+                            style={{ 
+                                width: '60px', 
+                                fontSize: '24px', 
+                                background: 'white', 
+                                border: '2px solid #eee', 
+                                cursor: 'pointer', 
+                                borderRadius: '30px',
+                                color: 'red',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            }}
+                            title="Add to Wishlist"
+                        >
+                            ❤️
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
-            {/* --- REVIEWS SECTION (Simplified) --- */}
+            {/* Reviews Section */}
             <div style={{ marginTop: '50px', borderTop: '1px solid #eee', paddingTop: '30px' }}>
                 <h2>Reviews</h2>
                 {reviews.length === 0 ? <p>No reviews yet.</p> : reviews.map(r => (
