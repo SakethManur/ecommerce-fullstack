@@ -1,15 +1,29 @@
 const mysql = require('mysql2');
-
+require('dotenv').config();
 
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',        
-    password: 'saketh@964FCB', 
-    database: 'ecommerce_db',
-    port : 3306,
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'ecommerce_db',
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    // --- CRITICAL FOR CLOUD DATABASES ---
+    ssl: {
+        rejectUnauthorized: false // Allows connection to cloud DBs like TiDB/PlanetScale
+    }
 });
 
-module.exports = pool.promise(); 
+// Test the connection immediately on startup
+pool.getConnection((err, connection) => {
+    if (err) {
+        console.error("❌ Database Connection Failed:", err.message);
+    } else {
+        console.log("✅ Connected to Database successfully!");
+        connection.release();
+    }
+});
+
+module.exports = pool.promise();
