@@ -70,13 +70,13 @@ cd ecommerce-fullstack
 cd server
 npm install
 
-# Create a .env file with:
+# Create a .env file (see server/.env.example for all keys):
 # DB_HOST=your_host
 # DB_USER=your_user
-# DB_PASS=your_password
+# DB_PASSWORD=your_password
 # DB_NAME=your_database
 
-node index.js
+npm start      # or: npm run dev  (nodemon)
 
 
 ### 3. Frontend Setup
@@ -86,7 +86,7 @@ node index.js
 cd ../client
 npm install
 
-# Create .env with:
+# Create .env with (see client/.env.example):
 # VITE_API_URL=http://localhost:5001
 
 npm run dev
