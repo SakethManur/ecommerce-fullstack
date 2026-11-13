@@ -7,6 +7,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// --- 0. HEALTH CHECK ---
+
+// Reports 200 only when the process is up AND the database answers, so a
+// container orchestrator can tell "listening" apart from "actually usable".
+app.get('/health', async (req, res) => {
+    try {
+        await db.query('SELECT 1');
+        res.json({ status: 'ok', database: 'connected' });
+    } catch (err) {
+        res.status(503).json({
+            status: 'error',
+            database: 'disconnected',
+            error: err.message
+        });
+    }
+});
+
 // --- 1. PRODUCT APIs ---
 
 // GET /products
