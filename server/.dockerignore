@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+# Never bake secrets into the image -- the container gets its config from the
+# environment (see docker-compose.yml).
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore

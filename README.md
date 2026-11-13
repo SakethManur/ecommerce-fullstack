@@ -58,6 +58,34 @@ Normalized relational database includes:
 
 ---
 
+## 🐳 Run with Docker (recommended)
+
+One command brings up MySQL (schema + demo data loaded automatically), the
+API and the client:
+
+```sh
+docker compose up --build
+```
+
+| Service | URL |
+|---------|-----|
+| Client  | http://localhost:8080 |
+| API     | http://localhost:5001 (health check: `/health`) |
+| MySQL   | localhost:3307 (user `ecommerce`, password `ecommerce_pass`) |
+
+Demo logins seeded for local development only -- the API stores passwords in
+plaintext, so treat these as throwaway:
+
+| Role     | Email                  | Password      |
+|----------|------------------------|---------------|
+| Admin    | `admin@example.com`    | `admin123`    |
+| Customer | `customer@example.com` | `customer123` |
+
+`docker compose down -v` removes the database volume, so the next `up`
+re-runs `server/db/schema.sql` and `server/db/seed.sql` from scratch.
+
+---
+
 ## 🚀 Local Installation
 
 ### 1. Clone the Repository
@@ -69,6 +97,10 @@ cd ecommerce-fullstack
 ```sh
 cd server
 npm install
+
+# Create the tables and (optionally) load demo data:
+#   mysql -u root -p < db/schema.sql
+#   mysql -u root -p < db/seed.sql
 
 # Create a .env file (see server/.env.example for all keys):
 # DB_HOST=your_host

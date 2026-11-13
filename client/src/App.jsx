@@ -4,8 +4,9 @@ import { HashRouter as Router, Routes, Route, Link, useNavigate, useParams, useL
 import axios from 'axios';
 
 // --- CONFIGURATION ---
-// ⚠️ PASTE YOUR RENDER URL INSIDE THE QUOTES BELOW ⚠️
-const API_URL = 'https://my-shop-api-r0me.onrender.com'; 
+// Set VITE_API_URL (see .env.example) to point at a different API; the
+// deployed Render URL stays the default so production builds are unchanged.
+const API_URL = import.meta.env.VITE_API_URL || 'https://my-shop-api-r0me.onrender.com';
 
 const api = axios.create({
     baseURL: API_URL,
