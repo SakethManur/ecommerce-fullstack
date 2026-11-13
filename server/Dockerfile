@@ -23,4 +23,7 @@ EXPOSE 5001
 HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=5 \
     CMD node -e "require('http').get('http://127.0.0.1:'+(process.env.PORT||5001)+'/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
 
-CMD ["npm", "start"]
+# node directly, not `npm start`: npm would be PID 1 and would not forward
+# SIGTERM, so the graceful shutdown in src/server.js would never run and the
+# container would be SIGKILLed after the stop timeout.
+CMD ["node", "src/server.js"]

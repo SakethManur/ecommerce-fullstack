@@ -49,9 +49,12 @@ services:
       DB_NAME: ecommerce_db
       DB_USER: ecommerce
       DB_PASSWORD: ecommerce_pass
-      # The MySQL container's TLS cert is self-signed; db.js already connects
+      # The MySQL container's TLS cert is self-signed; config/db.js connects
       # with rejectUnauthorized: false.
       PORT: "5001"
+      # The client is served from a different port, so it is a different
+      # origin and has to be allowed explicitly.
+      CORS_ORIGIN: http://localhost:8080
     ports:
       - "5001:5001"
     depends_on:
